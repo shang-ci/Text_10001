@@ -50,10 +50,19 @@ public class Card : MonoBehaviour,IDragHandler, IBeginDragHandler, IEndDragHandl
 
     public void OnDrag(PointerEventData eventData)
     {
+        //// 将鼠标屏幕坐标转换为世界坐标——实现卡牌跟随鼠标移动拖拽效果
+        //Vector3 screenPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
+        //Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+        //transform.position = worldPos;
+
         // 将鼠标屏幕坐标转换为世界坐标——实现卡牌跟随鼠标移动拖拽效果
-        Vector3 screenPos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f);
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
-        transform.position = worldPos;
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            transform.parent as RectTransform,
+            eventData.position,
+            eventData.pressEventCamera,
+            out localPoint);
+        (transform as RectTransform).anchoredPosition = localPoint;
 
 
     }
